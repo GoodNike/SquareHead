@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 project(squarehead)
 
-set(APP_VERSION_MAJOR 0)
-set(APP_VERSION_MINOR 3)
-set(APP_VERSION_PATCH 0)
-
 # Директория для поиска сценариев CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
@@ -57,6 +53,34 @@ set(SOURCES
     "src/Player/PlayerHuman.cpp"
     "src/Player/PlayerHuman.h"
 )
+
+find_package(Git)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+                    RESULT_VARIABLE git_result
+                    OUTPUT_VARIABLE git_output
+                    ERROR_VARIABLE  git_error
+                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    if(NOT ${git_result} EQUAL 0)
+        message("Command \"${GIT_EXECUTABLE} describe in ${PROJECT_SOURCE_DIR}\" failed with output:\n${git_error}")
+    else()
+        set(APP_VERSION_STRING ${git_output})
+    endif()
+endif()
+
+# Разбор строки с версией следующего вида: "v1.0.0".
+if(${APP_VERSION_STRING} MATCHES "v([0-9]+)\\.([0-9]+).([0-9]*)")
+    set(APP_VERSION_MAJOR ${CMAKE_MATCH_1})
+    set(APP_VERSION_MINOR ${CMAKE_MATCH_2})
+    set(APP_VERSION_PATCH ${CMAKE_MATCH_3})
+else()
+    set(APP_VERSION_MAJOR "0")
+    set(APP_VERSION_MINOR "0")
+    set(APP_VERSION_PATCH "0")
+endif()
+message(STATUS "Building SquareHead v${APP_VERSION_MAJOR}.${APP_VERSION_MINOR}.${APP_VERSION_PATCH}")
 
 set(VERSION_H_IN  "${PROJECT_SOURCE_DIR}/cmake/Version.h.in")
 set(VERSION_H     "${PROJECT_BINARY_DIR}/Version.h")
