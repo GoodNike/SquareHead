@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+CMakeLists\.txt\.user
+
+games/
+
+share/

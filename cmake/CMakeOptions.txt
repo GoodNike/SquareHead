@@ -1,0 +1,36 @@
+# Позиционно-независимый код в Linux
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Директория установки
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    get_filename_component(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" ABSOLUTE)
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Install path prefix." FORCE)
+endif()
+
+# Путь для поиска библиотек в Linux после установки
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+
+# Конфигурация по умолчанию
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Type of build." FORCE)
+
+# Использовать группировку проектов в Visual Studio
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+if(MSVC)
+    # Активируем флаг "Multi-processor Compilation" для MSVC: значительно ускоряет сборку на многоядерной системе.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+endif()
+
+# Активируем режим отладки итераторов дабы видеть ошибки работы с памятью для различных компиляторов.
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DEBUG")
+    # Для Visual Studio вроде как и не нужно - само все делает. Нужно дополнительно проверить в VS2017.
+    #elseif(MSVC)
+    #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_ITERATOR_DEBUG_LEVEL=1")
+    endif()
+endif()
+

@@ -1,0 +1,6 @@
+?package(squarehead): \
+needs="X11" \
+section="Games/Puzzles" \
+title="SquareHead classic game" \
+command="/usr/games/squarehead"
+icon="/usr/share/pixmaps/squarehead.xpm"

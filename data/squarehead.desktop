@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=SquareHead
+Comment=SquareHead classic game
+Comment[en_AU]=SquareHead classic game
+Comment[en_GB]=SquareHead classic game
+Comment[ru]=Классическая игра SquareHead
+Exec=squarehead
+Terminal=false
+Icon=squarehead
+Type=Application
+Categories=Game;
+StartupNotify=true
