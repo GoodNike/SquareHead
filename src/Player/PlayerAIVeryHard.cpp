@@ -1,16 +1,16 @@
-#include "PlayerAIHard.h"
+#include "PlayerAIVeryHard.h"
 
 #include "Field.h"
 
-PlayerAIHard::PlayerAIHard(Field &field) : Player(field, Player_t::AI_Hard)
+PlayerAIVeryHard::PlayerAIVeryHard(Field &field) : Player(field, Player_t::AI_Hard)
 {
 }
 
-PlayerAIHard::~PlayerAIHard() = default;
+PlayerAIVeryHard::~PlayerAIVeryHard() = default;
 
-Qt::GlobalColor PlayerAIHard::makeTurn()
+Qt::GlobalColor PlayerAIVeryHard::makeTurn()
 {
-    // Алгоритм: сделаем прогноз на 4 хода вперед дабы выбрать такой ход сейчас, который даст максимальный
+    // Алгоритм: сделаем прогноз на 6 ходов вперед дабы выбрать такой ход сейчас, который даст максимальный
     // прирост очков за время прогноза. При этом соперник ходит так, чтобы получить максимальный прирост
     // очков на своем текущем ходу.
 
@@ -74,16 +74,16 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
     }
 
     // Запустим рекурсию и вычислим ход.
-    auto res = recursion(4, field(), (*vsPlayerRef)->pos());
+    auto res = recursion(6, field(), (*vsPlayerRef)->pos());
 
     return res.second;
 }
 
-bool PlayerAIHard::acceptTurn(Qt::GlobalColor color)
+bool PlayerAIVeryHard::acceptTurn(Qt::GlobalColor color)
 {
     Q_UNUSED(color);
 
     return false;
 }
 
-void PlayerAIHard::stopThinking() { }
+void PlayerAIVeryHard::stopThinking() { }

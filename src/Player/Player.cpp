@@ -5,6 +5,7 @@
 #include "PlayerAIEasy.h"
 #include "PlayerAIMedium.h"
 #include "PlayerAIHard.h"
+#include "PlayerAIVeryHard.h"
 #include "PlayerHuman.h"
 
 struct Player::data_t {
@@ -48,6 +49,12 @@ std::shared_ptr<Player> Player::PlayersFactory(Field &field, Player_t p)
     case Player_t::AI_Hard:
     {
         player = std::make_shared<PlayerAIHard>(field);
+    }
+    break;
+
+    case Player_t::AI_VeryHard:
+    {
+        player = std::make_shared<PlayerAIVeryHard>(field);
     }
     break;
 

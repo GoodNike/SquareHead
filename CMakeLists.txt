@@ -50,6 +50,8 @@ set(SOURCES
     "src/Player/PlayerAIMedium.h"
     "src/Player/PlayerAIHard.cpp"
     "src/Player/PlayerAIHard.h"
+    "src/Player/PlayerAIVeryHard.cpp"
+    "src/Player/PlayerAIVeryHard.h"
     "src/Player/PlayerHuman.cpp"
     "src/Player/PlayerHuman.h"
 )

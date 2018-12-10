@@ -11,6 +11,7 @@ enum class Player_t {
     AI_Easy,
     AI_Medium,
     AI_Hard,
+    AI_VeryHard,
     Human,
     Unknown
 };
