@@ -69,6 +69,7 @@ void OptionsDialog::on_pbOk_clicked()
             Settings::playerType(ai) = Player_t::AI_Hard;
             Settings::playerName(ai) = "AI_Hard";
         }
+        break;
 
         case 4:
         default:
