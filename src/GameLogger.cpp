@@ -12,8 +12,21 @@ GameLogger::GameLogger(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
     m_game(nullptr),
-    m_initilized(false)
+    m_initilized(false),
+    m_enabled(false)
 {
+}
+
+GameLogger::~GameLogger() = default;
+
+void GameLogger::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
+bool GameLogger::enabled() const
+{
+    return m_enabled;
 }
 
 void GameLogger::setMainWindow(QWidget *mainWindow)
@@ -28,6 +41,10 @@ void GameLogger::setGame(const Game *game)
 
 void GameLogger::onNewGame()
 {
+    if (!m_enabled) {
+        return;
+    }
+
     if (m_mainWindow == nullptr) {
         qDebug() << "Uninitialized m_mainWindow variable";
         return;
@@ -84,6 +101,10 @@ void GameLogger::onNewGame()
 
 void GameLogger::onNextTurn()
 {
+    if (!m_enabled) {
+        return;
+    }
+
     if (m_mainWindow == nullptr) {
         qDebug() << "Uninitialized m_mainWindow variable";
         return;

@@ -1,24 +1,27 @@
-# Позиционно-независимый код в Linux
+# Позиционно-независимый код в Linux.
 if (UNIX)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-# Директория установки
+# Директория установки.
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     get_filename_component(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" ABSOLUTE)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Install path prefix." FORCE)
 endif()
 
-# Путь для поиска библиотек в Linux после установки
+# Путь для поиска библиотек в Linux после установки.
 set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 
-# Конфигурация по умолчанию
+# Конфигурация по умолчанию.
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Type of build." FORCE)
 
-# Использовать группировку проектов в Visual Studio
+# Платформо-независимый define для определения отладочной сборки.
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_BUILD")
+
+# Использовать группировку проектов в Visual Studio.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)

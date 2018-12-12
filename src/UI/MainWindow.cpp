@@ -22,6 +22,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_ui.setupUi(this);
 
+#ifdef DEBUG_BUILD
+    m_gameLogger.setEnabled(true);
+#else
+    m_gameLogger.setEnabled(false);
+#endif
+
     setWindowTitle(QString("SquareHead ") + VERSION_STRING);
 
     // Нарисуем кнопки для выбора следующего хода игроком.
