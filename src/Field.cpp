@@ -35,6 +35,7 @@ Field::Field(const Field &other)
     m_colors = other.m_colors;
     m_field = other.m_field;
     m_players = other.m_players;
+    m_scoreCash = other.m_scoreCash;
 }
 
 Field& Field::operator=(const Field &other)
@@ -48,6 +49,7 @@ Field& Field::operator=(const Field &other)
     m_colors = other.m_colors;
     m_field = other.m_field;
     m_players = other.m_players;
+    m_scoreCash = other.m_scoreCash;
 
     return *this;
 }
@@ -60,6 +62,7 @@ void Field::prepareField()
     }
 
     m_field.clear();
+    m_scoreCash.clear();
 
     // Размер поля зададим для себя сами в момент подготовки поля (временно).
     setFieldSize(DEFAULT_FIELD_SIZE_X, DEFAULT_FIELD_SIZE_Y);
@@ -233,42 +236,83 @@ QVector<Player*> Field::players() const
     return ret;
 }
 
-void Field::playersTurn(const QPair<int, int> &pos, Qt::GlobalColor color)
+int Field::playersTurn(const QPair<int, int> &pos, Qt::GlobalColor color)
 {
-    std::function<void(int, int, Qt::GlobalColor, Qt::GlobalColor)> algorithm = [this, &algorithm] (int x, int y, Qt::GlobalColor color, Qt::GlobalColor newColor) {
-        auto isCellValid = [this] (int x, int y) {
-            if (x < fieldSizeX() && x >= 0 && y < fieldSizeY() && y >= 0) {
-                return true;
-            } else {
+    int score = 0;
+    QVector<QPair<int, int>> visited;
+    visited.reserve(fieldSizeX() * fieldSizeY());
+
+    std::function<void(const QPair<int, int>, Qt::GlobalColor, Qt::GlobalColor, bool)> algorithm = [this, &algorithm, &score, &visited] (const QPair<int, int> cell, Qt::GlobalColor color, Qt::GlobalColor newColor, bool drawCompleted) {
+        auto addScore = [&visited, &score] (const QPair<int, int> cell) {
+            if (visited.contains(cell)) {
                 return false;
+            } else {
+                visited.push_back(cell);
+                score++;
+                return true;
             }
         };
 
-        setColor(x, y, newColor);
+        auto doCellActions = [&algorithm, &addScore, this] (const QPair<int, int> cell, Qt::GlobalColor color, Qt::GlobalColor newColor, bool drawCompleted) {
+            if (cell.first < fieldSizeX() && cell.first >= 0 &&
+                cell.second < fieldSizeY() && cell.second >= 0)
+            {
+                if (this->color(cell) == newColor || this->color(cell) == color) {
+                    if (this->color(cell) == newColor) {
+                        drawCompleted = true;
+                    }
 
-        if (isCellValid(x - 1, y) && this->color(x - 1, y) == color) {
-            algorithm(x - 1, y, color, newColor);
-        }
+                    if (drawCompleted) {
+                        if (this->color(cell) == newColor) {
+                            if (!addScore(cell)) {
+                                return;
+                            }
+                        } else {
+                            return;
+                        }
+                    } else {
+                        setColor(cell, newColor);
+                        if (!addScore(cell)) {
+                            return;
+                        }
+                    }
 
-        if (isCellValid(x, y - 1) && this->color(x, y - 1) == color) {
-            algorithm(x, y - 1, color, newColor);
-        }
+                    algorithm(cell, color, newColor, drawCompleted);
+                }
+            }
+        };
 
-        if (isCellValid(x + 1, y) && this->color(x + 1, y) == color) {
-            algorithm(x + 1, y, color, newColor);
-        }
+        QPair<int, int> nextCell;
 
-        if (isCellValid(x, y + 1) && this->color(x, y + 1) == color) {
-            algorithm(x, y + 1, color, newColor);
-        }
+        nextCell = qMakePair( cell.first, cell.second );
+        doCellActions(nextCell, color, newColor, drawCompleted);
+
+        nextCell = qMakePair( cell.first - 1, cell.second );
+        doCellActions(nextCell, color, newColor, drawCompleted);
+
+        nextCell = qMakePair( cell.first, cell.second - 1 );
+        doCellActions(nextCell, color, newColor, drawCompleted);
+
+        nextCell = qMakePair( cell.first + 1, cell.second );
+        doCellActions(nextCell, color, newColor, drawCompleted);
+
+        nextCell = qMakePair( cell.first, cell.second + 1 );
+        doCellActions(nextCell, color, newColor, drawCompleted);
     };
 
     auto currentColor = this->color(pos);
-    algorithm(pos.first, pos.second, currentColor, color);
+    algorithm(pos, currentColor, color, false);
+    m_scoreCash[pos] = score;
+
+    return score;
 }
 
 int Field::calcScore(const QPair<int, int> &pos) const
 {
+    if (m_scoreCash.contains(pos)) {
+        return m_scoreCash[pos];
+    }
+
     QVector<QPair<int, int>> visited;
 
     visited.reserve(fieldSizeX() * fieldSizeY());

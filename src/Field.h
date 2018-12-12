@@ -48,7 +48,7 @@ public:
     QVector<QPair<int, int>> playersPos() const;
     QVector<Player*> players() const;
 
-    void playersTurn(const QPair<int, int> &pos, Qt::GlobalColor color);
+    int playersTurn(const QPair<int, int> &pos, Qt::GlobalColor color);
     int calcScore(const QPair<int, int> &pos) const;
 
     bool turnValidator(Qt::GlobalColor color) const;
@@ -59,6 +59,7 @@ private:
     QVector<Qt::GlobalColor> m_colors;
     QVector<QVector<Qt::GlobalColor>> m_field;
     std::vector<std::shared_ptr<Player>> m_players;
+    QMap<QPair<int,int>, int> m_scoreCash;
 
 protected:
 };
