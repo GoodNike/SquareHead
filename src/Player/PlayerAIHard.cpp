@@ -14,28 +14,52 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
     // прирост очков за время прогноза. При этом соперник ходит так, чтобы получить максимальный прирост
     // очков на своем текущем ходу.
 
-    // Функция выбора наилучшего хода: для поля f в позиции pos возвращает цвет, который даст наибольший
-    // прирост очков.
-    auto bestTurn = [] (const Field &f, auto &pos) {
-        Qt::GlobalColor preferredColor = Qt::transparent;
-        int maxScore = std::numeric_limits<int>::min();
-        for(auto i : f.availableColors()) {
-            Field field = f;
-            field.playersTurn(pos, i);
-            int score = field.calcScore( pos );
+    using ColorScore = QPair<Qt::GlobalColor, int>;
+    using BestTurns = QPair<ColorScore, ColorScore>;
 
-            if (score > maxScore) {
-                maxScore = score;
-                preferredColor = i;
+    std::function<QVector<BestTurns>(int, const Field&, const Player*)>
+    prepareVsTurns = [] (int level, const Field &field, const Player *vsPlayer)
+    {
+        QVector<BestTurns> vsPlayersTurns;
+
+        Field fieldCopy = field;
+        for (int i = 0; i < level; ++i) {
+            if (i > 0) {
+                fieldCopy.playersTurn(vsPlayer->pos(), vsPlayersTurns[i - 1].second.first);
+            }
+
+            QVector<ColorScore> vsPlayerScore;
+            for (const auto &i : fieldCopy.colors()) {
+                if (i == vsPlayer->color()) {
+                    continue;
+                }
+
+                Field f = fieldCopy;
+                f.playersTurn(vsPlayer->pos(), i);
+                vsPlayerScore.push_back( qMakePair(i, f.calcScore(vsPlayer->pos())) );
+            }
+
+            // Отсортируем - в начале самые успешные ходы.
+            auto greaterFunc = [] (auto &&a, auto &&b) {
+                return std::tie(a.second, a.first) > std::tie(b.second, b.first);
+            };
+            std::sort(std::begin(vsPlayerScore), std::end(vsPlayerScore), greaterFunc);
+
+            if (vsPlayerScore.size() >= 2) {
+                vsPlayersTurns.push_back( qMakePair(vsPlayerScore[0], vsPlayerScore[1]) );
+            } else {
+                // Меньше двух вариантов хода - что-то пошло не так, по идее такого быть не должно. Заполним
+                // структуру так, чтобы ничего дальше не упало.
+                vsPlayersTurns.push_back( qMakePair(qMakePair(Qt::transparent, 0), qMakePair(Qt::transparent, 0)) );
             }
         }
 
-        return preferredColor;
+        return vsPlayersTurns;
     };
 
     // Основной алгоритм в виде рекурсии.
-    std::function<QPair<int, Qt::GlobalColor> (int level, const Field &field, const QPair<int, int> vsPlayerPos)>
-    recursion = [this, &bestTurn, &recursion] (int level, const Field &field, const QPair<int, int> vsPlayerPos)
+    std::function<QPair<int, Qt::GlobalColor> (int, const Field&, const Player*, const QVector<BestTurns>&)>
+    recursion = [this, &recursion] (int level, const Field &field, const Player *vsPlayer, const QVector<BestTurns> &vsTurns)
     {
         if (level <= 0) {
             return qMakePair( field.calcScore( pos() ), field.color( pos() ) );
@@ -52,9 +76,15 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
                 continue;
             }
 
-            f.playersTurn( vsPlayerPos, bestTurn(f, vsPlayerPos) );
+            auto firstTurn = vsTurns[vsTurns.size() - level].first;
+            auto secondTurn = vsTurns[vsTurns.size() - level].second;
+            if (firstTurn.first != f.color( pos() )) {
+                f.playersTurn(vsPlayer->pos(), firstTurn.first);
+            } else {
+                f.playersTurn(vsPlayer->pos(), secondTurn.first);
+            }
 
-            auto pair = recursion( level - 1, f, vsPlayerPos );
+            auto pair = recursion( level - 1, f, vsPlayer, vsTurns );
             if (pair.first > score.first) {
                 score.first = pair.first;
                 score.second = c;
@@ -72,9 +102,12 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
     if (vsPlayerRef == std::end(players)) {
         return Qt::transparent;
     }
+    const auto vsPlayer = *vsPlayerRef;
 
+    // Подготовим прогноз оптимальных для врага ходов.
+    auto vsPlayersTurns = prepareVsTurns(4, field(), vsPlayer);
     // Запустим рекурсию и вычислим ход.
-    auto res = recursion(4, field(), (*vsPlayerRef)->pos());
+    auto res = recursion(4, field(), vsPlayer, vsPlayersTurns);
 
     return res.second;
 }
