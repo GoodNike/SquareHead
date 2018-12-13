@@ -41,11 +41,11 @@ Qt::GlobalColor PlayerAIMedium::makeTurn()
     }
 
     // Отсортируем - в начале самые успешные ходы.
-    auto lessFunc = [] (auto &&a, auto &&b) {
-        return std::tie(a.second, a.first) < std::tie(b.second, b.first);
+    auto greaterFunc = [] (auto &&a, auto &&b) {
+        return std::tie(a.second, a.first) > std::tie(b.second, b.first);
     };
-    std::sort(std::begin(vsPlayerScore), std::end(vsPlayerScore), lessFunc);
-    std::sort(std::begin(aiPlayerScore), std::end(aiPlayerScore), lessFunc);
+    std::sort(std::begin(vsPlayerScore), std::end(vsPlayerScore), greaterFunc);
+    std::sort(std::begin(aiPlayerScore), std::end(aiPlayerScore), greaterFunc);
 
     // Если у соперника нет ходов, то что-то пошло не так: такого быть не должно.
     if (vsPlayerScore.size() < 2) {
