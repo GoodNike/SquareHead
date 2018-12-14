@@ -17,6 +17,7 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
     using ColorScore = QPair<Qt::GlobalColor, int>;
     using BestTurns = QPair<ColorScore, ColorScore>;
 
+    // Подготовка лучших возможных двух ходов с максимальным количеством очков победы. На несколько ходов вперед.
     std::function<QVector<BestTurns>(int, const Field&, const Player*)>
     prepareVsTurns = [] (int level, const Field &field, const Player *vsPlayer)
     {
@@ -76,6 +77,7 @@ Qt::GlobalColor PlayerAIHard::makeTurn()
                 continue;
             }
 
+            // Соперник ходит только заранее известными ходами.
             auto firstTurn = vsTurns[vsTurns.size() - level].first;
             auto secondTurn = vsTurns[vsTurns.size() - level].second;
             if (firstTurn.first != f.color( pos() )) {
