@@ -1,0 +1,39 @@
+name: squarehead
+version: 'git'
+summary: SquareHead classic game
+description: |
+  SquareHead is a classic turn-based puzzle game that is played on a 32x20
+  field. Cells of the field are painted in different colors. One player
+  starts on one corner of the field, another on the other. In their turn,
+  players "repaint" their own cell, thereby adding adjacent cells of the
+  same color to it. At the end, the player with the most cells wins.
+
+  The game has several levels of difficulty and minimalistic interface.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+icon: data/icons/256x256/squarehead.png
+
+apps:
+  squarehead:
+    command: squarehead
+    desktop: usr/share/applications/squarehead.desktop
+
+parts:
+  squarehead:
+    source: .
+    plugin: cmake
+    build-packages:
+      - qtbase5-dev
+      - g++
+    stage-packages:
+      - gnome-menus
+      - hicolor-icon-theme
+      - libcanberra-gtk-module
+      - libgail-common
+      - mime-support
+      - qtbase5-dev
+      - libcanberra-gtk3-module
+      - libc6 # For Ubuntu 16.06
+      - libuchardet0
+      - qtwayland5
