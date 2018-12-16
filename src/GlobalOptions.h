@@ -30,6 +30,11 @@ namespace Settings {
     }
 };
 
+enum class Language {
+    ENGLISH,
+    RUSSIAN
+};
+
 class GlobalOptions {
 public:
     static GlobalOptions& instance();
@@ -38,6 +43,9 @@ public:
 
     void setPlayers(const QVector<PlayerSettings>&);
     const QVector<PlayerSettings>& players() const;
+
+    void setLanguage(Language);
+    Language language() const;
 
 private:
     GlobalOptions() = default;

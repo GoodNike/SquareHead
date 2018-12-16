@@ -96,11 +96,21 @@ include_directories(${PROJECT_BINARY_DIR})
 add_executable(${PROJECT_NAME} WIN32 ${MAINWINDOW} ${OPTIONSDIALOG} ${SOURCES} ${VERSION_H})
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
 
+set(TS_FILES
+    "data/${PROJECT_NAME}_en_US.ts"
+    "data/${PROJECT_NAME}_ru_RU.ts"
+)
+find_package(Qt5LinguistTools)
+qt5_create_translation(QM_FILES ${PROJECT_SOURCE_DIR}/src ${TS_FILES})
+add_custom_target(translations ALL DEPENDS ${QM_FILES})
+
 # Для Linux добавим библиотеку многопоточности, т.к. без нее std::thread не работает.
 if (UNIX)
     get_target_property(LIBRARIES ${PROJECT_NAME} LINK_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} ${LIBRARIES} pthread)
 endif()
+
+message(STATUS "${PROJECT_BINARY_DIR}")
 
 if (UNIX)
     set(CPACK_GENERATOR "DEB")
@@ -161,6 +171,11 @@ if (UNIX)
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/256x256/squarehead.png
         DESTINATION share/icons/hicolor/256x256/apps
+    )
+
+    install(
+        FILES ${QM_FILES}
+        DESTINATION share/qt5/translations
     )
 endif()
 

@@ -22,6 +22,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_ui.setupUi(this);
 
+    if (GlobalOptions::instance().language() == Language::RUSSIAN) {
+        m_ui.actionRussian->setChecked(true);
+        m_ui.actionEnglish->setChecked(false);
+    } else {
+        m_ui.actionRussian->setChecked(false);
+        m_ui.actionEnglish->setChecked(true);
+    }
+
+    m_lngTitle = QObject::tr("Language change");
+    m_lngMsg = QObject::tr("Changing application language requires restart");
+
 #ifdef DEBUG_BUILD
     m_gameLogger.setEnabled(true);
 #else
@@ -90,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent)
         QStringList list;
         if (!p.isEmpty()) {
             decltype(p)::value_type winner = p[0];
-            list << "Total score:";
+            list << tr("Total score:");
             for (const auto &i : p) {
                 list << QString("%1 : %2").arg(i->name()).arg(i->score());
                 if (i->score() > winner->score()) {
@@ -105,21 +116,21 @@ MainWindow::MainWindow(QWidget *parent)
                 }
             }
             if (draw) {
-                list << QString("It's a DRAW, no winner");
+                list << tr("It's a DRAW, no winner");
             } else {
-                list << QString("The winner is %1 !!!").arg(winner->name());
+                list << tr("The winner is %1 !!!").arg(winner->name());
             }
         }
         for (auto &i : m_buttons) {
             i->setEnabled(false);
         }
-        QMessageBox::information(this, "Game finished!", list.join('\n'));
+        QMessageBox::information(this, tr("Game finished!"), list.join('\n'));
     } , Qt::QueuedConnection );
 
     connect(m_ui.actionExit, &QAction::triggered, this, &MainWindow::close);
 
     connect(m_ui.actionAbout, &QAction::triggered, this, [this] () {
-        QMessageBox::about(this, "About program", QString("SquareHead ") + VERSION_STRING);
+        QMessageBox::about(this, tr("About program"), QString("SquareHead ") + VERSION_STRING);
     } );
 
     connect(m_ui.actionNewGame, &QAction::triggered, this, [this] () {
@@ -187,4 +198,32 @@ void MainWindow::on_buttonPlayerTurn(Qt::GlobalColor color)
     if (!m_turnAcceptor(color)) {
         qDebug() << "Human turn NOT ACCEPTED, wrong color: " << color;
     }
+}
+
+void MainWindow::on_actionEnglish_triggered(bool checked)
+{
+    if (checked == false) {
+        m_ui.actionEnglish->setChecked(true);
+        return;
+    }
+
+    GlobalOptions::instance().setLanguage(Language::ENGLISH);
+
+    m_ui.actionRussian->setChecked(false);
+
+    QMessageBox::information(this, m_lngTitle, m_lngMsg);
+}
+
+void MainWindow::on_actionRussian_triggered(bool checked)
+{
+    if (checked == false) {
+        m_ui.actionRussian->setChecked(true);
+        return;
+    }
+
+    GlobalOptions::instance().setLanguage(Language::RUSSIAN);
+
+    m_ui.actionEnglish->setChecked(false);
+
+    QMessageBox::information(this, m_lngTitle, m_lngMsg);
 }

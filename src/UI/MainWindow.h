@@ -20,6 +20,8 @@ public:
 
 private slots:
     void on_buttonPlayerTurn(Qt::GlobalColor color);
+    void on_actionEnglish_triggered(bool checked);
+    void on_actionRussian_triggered(bool checked);
 
 private:
     struct namesAndColors_t {
@@ -33,4 +35,6 @@ private:
     Field::TurnAcceptor m_turnAcceptor;
     QVector<QPushButton*> m_buttons;
     std::map<Player*, namesAndColors_t> m_playersOutput;
+    QString m_lngTitle;
+    QString m_lngMsg;
 };
