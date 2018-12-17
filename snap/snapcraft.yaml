@@ -17,8 +17,8 @@ base: core18
 
 apps:
   squarehead:
-    command: desktop-launch ${SNAP}/games/squarehead
-    desktop: usr/share/applications/squarehead.desktop
+    command: games/squarehead
+    desktop: share/applications/squarehead.desktop
 
 parts:
   squarehead:
@@ -34,7 +34,10 @@ parts:
       - qttools5-dev
       - qttools5-dev-tools
     stage-packages:
+      - libqt5gui5
       - libqt5widgets5
+      - xcb
+      - libxcb1
       - gnome-menus
       - hicolor-icon-theme
       - libcanberra-gtk-module
@@ -43,3 +46,13 @@ parts:
       - libcanberra-gtk3-module
       - libuchardet0
       - qtwayland5
+      - libqt5svg5 # for loading icon themes which are svg
+      - libtiff5-dev
+      - libjpeg8-dev
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - shared-mime-info
+      - libgdk-pixbuf2.0-0
+      - locales-all
