@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 project(squarehead)
 
-# Директория для поиска сценариев CMake
+# Директория для поиска сценариев CMake.
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
@@ -15,6 +15,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt5 COMPONENTS Core Gui Widgets)
+
+if(UNIX)
+    include(GNUInstallDirs)
+endif()
 
 set(MAINWINDOW
     "src/UI/MainWindow.cpp"
@@ -131,51 +135,56 @@ if (UNIX)
     include(CPack)
 endif()
 
-install(
-    TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION games
-)
-
 if (UNIX)
+    # Программа и переводы.
+    install(
+        TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION games
+    )
+    install(
+        FILES ${QM_FILES}
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations
+    )
+
+    # Меню.
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/squarehead
-        DESTINATION share/menu
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/menu
     )
-
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/squarehead.desktop
-        DESTINATION share/applications
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
     )
 
+    # Иконки.
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/pixmaps/squarehead.xpm
-        DESTINATION share/pixmaps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
     )
-
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/16x16/squarehead.png
-        DESTINATION share/icons/hicolor/16x16/apps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16x16/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/32x32/squarehead.png
-        DESTINATION share/icons/hicolor/32x32/apps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/64x64/squarehead.png
-        DESTINATION share/icons/hicolor/64x64/apps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/128x128/squarehead.png
-        DESTINATION share/icons/hicolor/128x128/apps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/256x256/squarehead.png
-        DESTINATION share/icons/hicolor/256x256/apps
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
     )
-
+else()
     install(
-        FILES ${QM_FILES}
-        DESTINATION share/qt5/translations
+        TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION games
     )
 endif()
 

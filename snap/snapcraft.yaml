@@ -13,27 +13,33 @@ description: |
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 icon: data/icons/256x256/squarehead.png
+base: core18
 
 apps:
   squarehead:
-    command: squarehead
+    command: desktop-launch ${SNAP}/games/squarehead
     desktop: usr/share/applications/squarehead.desktop
 
 parts:
   squarehead:
+    source-type: git
     source: .
     plugin: cmake
     build-packages:
+      - build-essential
+      - qt5-default
       - qtbase5-dev
-      - g++
+      - dpkg-dev
+      # For Qt5LinguistTools
+      - qttools5-dev
+      - qttools5-dev-tools
     stage-packages:
+      - libqt5widgets5
       - gnome-menus
       - hicolor-icon-theme
       - libcanberra-gtk-module
       - libgail-common
       - mime-support
-      - qtbase5-dev
       - libcanberra-gtk3-module
-      - libc6 # For Ubuntu 16.06
       - libuchardet0
       - qtwayland5
