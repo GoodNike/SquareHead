@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 project(squarehead)
 
+# Опции проекта.
+option(SNAP_BUILD "Snap package build" OFF)
+
 # Директория для поиска сценариев CMake.
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
@@ -12,7 +15,7 @@ endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt5 COMPONENTS Core Gui Widgets)
 
@@ -114,8 +117,6 @@ if (UNIX)
     target_link_libraries(${PROJECT_NAME} ${LIBRARIES} pthread)
 endif()
 
-message(STATUS "${PROJECT_BINARY_DIR}")
-
 if (UNIX)
     set(CPACK_GENERATOR "DEB")
     set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
@@ -130,12 +131,21 @@ if (UNIX)
     set(CPACK_DEBIAN_PACKAGE_SECTION "Games")
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5 (>= 5.6.3)")
-    set(CPACK_PACKAGE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/games)
 
     include(CPack)
 endif()
 
+if (SNAP_BUILD)
+    message(STATUS "Performing SNAP build")
+endif()
+
 if (UNIX)
+    if (SNAP_BUILD)
+        set(INSTALL_PREFIX ${CMAKE_INSTALL_DATAROOTDIR}/usr/)
+    else()
+        set(INSTALL_PREFIX ${CMAKE_INSTALL_DATAROOTDIR})
+    endif()
+
     # Программа и переводы.
     install(
         TARGETS ${PROJECT_NAME}
@@ -143,43 +153,53 @@ if (UNIX)
     )
     install(
         FILES ${QM_FILES}
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations
+        DESTINATION ${INSTALL_PREFIX}/qt5/translations
     )
 
     # Меню.
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/squarehead
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/menu
+        DESTINATION ${INSTALL_PREFIX}/menu
     )
-    install(
-        FILES ${PROJECT_SOURCE_DIR}/data/squarehead.desktop
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
-    )
+
+    # desktop-файл.
+    if (SNAP_BUILD)
+        install(
+            FILES ${PROJECT_SOURCE_DIR}/data/squarehead_snap.desktop
+            DESTINATION ${INSTALL_PREFIX}/applications
+            RENAME squarehead.desktop
+        )
+    else()
+        install(
+            FILES ${PROJECT_SOURCE_DIR}/data/squarehead.desktop
+            DESTINATION ${INSTALL_PREFIX}/applications
+        )
+    endif()
 
     # Иконки.
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/pixmaps/squarehead.xpm
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
+        DESTINATION ${INSTALL_PREFIX}/pixmaps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/16x16/squarehead.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16x16/apps
+        DESTINATION ${INSTALL_PREFIX}/icons/hicolor/16x16/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/32x32/squarehead.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps
+        DESTINATION ${INSTALL_PREFIX}/icons/hicolor/32x32/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/64x64/squarehead.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps
+        DESTINATION ${INSTALL_PREFIX}/icons/hicolor/64x64/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/128x128/squarehead.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps
+        DESTINATION ${INSTALL_PREFIX}/icons/hicolor/128x128/apps
     )
     install(
         FILES ${PROJECT_SOURCE_DIR}/data/icons/256x256/squarehead.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
+        DESTINATION ${INSTALL_PREFIX}/icons/hicolor/256x256/apps
     )
 else()
     install(

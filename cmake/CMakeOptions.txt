@@ -14,7 +14,7 @@ set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 
 # Конфигурация по умолчанию.
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
+    set(CMAKE_BUILD_TYPE "MinSizeRel")
 endif()
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Type of build." FORCE)
 

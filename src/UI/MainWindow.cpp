@@ -139,9 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
         m_game.field().removeAllPlayers();
 
         for (const auto &i : GlobalOptions::instance().players()) {
-            const auto &player = Settings::playerType(i);
-            const auto &pos = Settings::playerPos(i);
-            const auto &name = Settings::playerName(i);
+            const auto &[player, pos, name] = i;
             if (player == Player_t::Human) {
                 m_turnAcceptor = m_game.field().addPlayer(pos, name, player);
             } else {
