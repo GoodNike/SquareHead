@@ -15,7 +15,7 @@ endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 find_package(Qt5 COMPONENTS Core Gui Widgets)
 
@@ -137,11 +137,12 @@ endif()
 
 if (SNAP_BUILD)
     message(STATUS "Performing SNAP build")
+    add_definitions(-DSNAP_BUILD)
 endif()
 
 if (UNIX)
     if (SNAP_BUILD)
-        set(INSTALL_PREFIX ${CMAKE_INSTALL_DATAROOTDIR}/usr/)
+        set(INSTALL_PREFIX /usr/${CMAKE_INSTALL_DATAROOTDIR})
     else()
         set(INSTALL_PREFIX ${CMAKE_INSTALL_DATAROOTDIR})
     endif()
@@ -163,18 +164,10 @@ if (UNIX)
     )
 
     # desktop-файл.
-    if (SNAP_BUILD)
-        install(
-            FILES ${PROJECT_SOURCE_DIR}/data/squarehead_snap.desktop
-            DESTINATION ${INSTALL_PREFIX}/applications
-            RENAME squarehead.desktop
-        )
-    else()
-        install(
-            FILES ${PROJECT_SOURCE_DIR}/data/squarehead.desktop
-            DESTINATION ${INSTALL_PREFIX}/applications
-        )
-    endif()
+    install(
+        FILES ${PROJECT_SOURCE_DIR}/data/squarehead.desktop
+        DESTINATION ${INSTALL_PREFIX}/applications
+    )
 
     # Иконки.
     install(

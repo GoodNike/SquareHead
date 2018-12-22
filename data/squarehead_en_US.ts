@@ -59,27 +59,27 @@
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../src/UI/MainWindow.cpp" line="104"/>
+        <location filename="../src/UI/MainWindow.cpp" line="110"/>
         <source>Total score:</source>
         <translation>Total score:</translation>
     </message>
     <message>
-        <location filename="../src/UI/MainWindow.cpp" line="119"/>
+        <location filename="../src/UI/MainWindow.cpp" line="125"/>
         <source>It&apos;s a DRAW, no winner</source>
         <translation>It&apos;s a DRAW, no winner</translation>
     </message>
     <message>
-        <location filename="../src/UI/MainWindow.cpp" line="121"/>
+        <location filename="../src/UI/MainWindow.cpp" line="127"/>
         <source>The winner is %1 !!!</source>
         <translation>The winner is %1 !!!</translation>
     </message>
     <message>
-        <location filename="../src/UI/MainWindow.cpp" line="127"/>
+        <location filename="../src/UI/MainWindow.cpp" line="133"/>
         <source>Game finished!</source>
         <translation>Game finished!</translation>
     </message>
     <message>
-        <location filename="../src/UI/MainWindow.cpp" line="133"/>
+        <location filename="../src/UI/MainWindow.cpp" line="139"/>
         <source>About program</source>
         <translation>About program</translation>
     </message>

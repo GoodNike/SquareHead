@@ -39,6 +39,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_gameLogger.setEnabled(false);
 #endif
 
+#ifdef SNAP_BUILD
+    // Для snap-пакета заблокируем меню выбора языка так как не выходит настроить переводы.
+    ///\todo Разобраться с загрузкой переводов в snap-пакетах.
+    m_ui.menuLanguage->menuAction()->setVisible(false);
+#endif
+
     setWindowTitle(QString("SquareHead ") + VERSION_STRING);
 
     // Нарисуем кнопки для выбора следующего хода игроком.
@@ -139,7 +145,9 @@ MainWindow::MainWindow(QWidget *parent)
         m_game.field().removeAllPlayers();
 
         for (const auto &i : GlobalOptions::instance().players()) {
-            const auto &[player, pos, name] = i;
+            const auto &player = Settings::playerType(i);
+            const auto &pos = Settings::playerPos(i);
+            const auto &name = Settings::playerName(i);
             if (player == Player_t::Human) {
                 m_turnAcceptor = m_game.field().addPlayer(pos, name, player);
             } else {

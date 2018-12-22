@@ -36,3 +36,8 @@ CMakeLists\.txt\.user
 games/
 
 share/
+
+parts/
+stage/
+prime/
+snap/.snapcraft/

@@ -56,13 +56,13 @@ struct options_t {
             saveSettings();
         } else {
             PlayerSettings p1;
-            Settings::playerType(p1) = settings.value("player1/type", QVariant::fromValue(Player_t::Human).toInt()).value<Player_t>();
-            Settings::playerPos(p1) = settings.value("player1/pos", QVariant::fromValue(PlayersPos_t::BottomRight)).value<PlayersPos_t>();
+            Settings::playerType(p1) = static_cast<Player_t>( settings.value("player1/type", QVariant::fromValue(Player_t::Human)).toInt() );
+            Settings::playerPos(p1) = static_cast<PlayersPos_t>( settings.value("player1/pos", QVariant::fromValue(PlayersPos_t::BottomRight)).toInt() );
             Settings::playerName(p1) = settings.value("player1/name", "Player").toString();
 
             PlayerSettings p2;
-            Settings::playerType(p2) = settings.value("player2/type", QVariant::fromValue(Player_t::AI_Hard).toInt()).value<Player_t>();
-            Settings::playerPos(p2) = settings.value("player2/pos", QVariant::fromValue(PlayersPos_t::TopLeft)).value<PlayersPos_t>();
+            Settings::playerType(p2) = static_cast<Player_t>( settings.value("player2/type", QVariant::fromValue(Player_t::AI_Hard)).toInt() );
+            Settings::playerPos(p2) = static_cast<PlayersPos_t>( settings.value("player2/pos", QVariant::fromValue(PlayersPos_t::TopLeft)).toInt() );
             Settings::playerName(p2) = settings.value("player2/name", "AI_Hard").toString();
 
             players.push_back(p1);
@@ -92,30 +92,39 @@ struct options_t {
 
     bool loadTranslation()
     {
+#ifdef SNAP_BUILD
+        ///\todo Разобраться с загрузкой переводов в snap-пакетах.
+        return false;   // Не получается для snap-пакета загрузить переводы.
+#endif
+
         const QString appLang = QString("%1_%2.qm").arg(appName.toLower()).arg(language);
         const QString qtLang = QString("qt_%1%2.qm").arg(language[0]).arg(language[1]);
+
 #ifdef DEBUG_BUILD
         const QString appLangLocation = ".";
+        const QString qtLangLocation = "/usr/share/qt5/translations";
 #else
         const QString appLangLocation = "/usr/share/qt5/translations";
-#endif
         const QString qtLangLocation = "/usr/share/qt5/translations";
+#endif
 
         if (!qtTranslator.load(qtLang, qtLangLocation)) {
-            qDebug() << "reloadTranslation(): fail to load translation file" << qtLang;
+            qDebug() << "loadTranslation(): fail to load translation file" << qtLang;
+            qDebug() << "Path:" << qtLangLocation;
             return false;
         }
         if (!QCoreApplication::installTranslator(&qtTranslator)) {
-            qDebug() << "reloadTranslation(): fail to install translator for" << qtLang;
+            qDebug() << "loadTranslation(): fail to install translator for" << qtLang;
             return false;
         }
 
         if (!appTranslator.load(appLang, appLangLocation)) {
-            qDebug() << "reloadTranslation(): fail to load translation file" << appLang;
+            qDebug() << "loadTranslation(): fail to load translation file" << appLang;
+            qDebug() << "Path:" << appLangLocation;
             return false;
         }
         if (!QCoreApplication::installTranslator(&appTranslator)) {
-            qDebug() << "reloadTranslation(): fail to install translator for" << appLang;
+            qDebug() << "loadTranslation(): fail to install translator for" << appLang;
             return false;
         }
 

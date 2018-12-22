@@ -10,15 +10,15 @@ description: |
 
   The game has several levels of difficulty and minimalistic interface.
 
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+grade: stable
+confinement: strict
 icon: data/icons/256x256/squarehead.png
-base: core18
 
 apps:
   squarehead:
     command: desktop-launch $SNAP/games/squarehead
-    desktop: share/usr/applications/squarehead.desktop
+    desktop: usr/share/applications/squarehead.desktop
+    plugs: [unity7, x11, opengl, gsettings, home, wayland, desktop, desktop-legacy]
 
 parts:
   squarehead:
@@ -27,60 +27,22 @@ parts:
     plugin: cmake
     configflags:
       - -DSNAP_BUILD=YES
-    after: [desktop-qt5-my]
+    after: [desktop-qt5]
     build-packages:
       - build-essential
-      - qt5-default
       - qtbase5-dev
       - dpkg-dev
-      # For Qt5LinguistTools
       - qttools5-dev
       - qttools5-dev-tools
     stage-packages:
       - qttranslations5-l10n
-      - libqt5gui5
-      - libqt5widgets5
-      - gnome-menus
-      - mime-support
-      - shared-mime-info
-      - hicolor-icon-theme
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - libcanberra-gtk-module
+      - libatk-adaptor
+      - overlay-scrollbar-gtk2
       - libcanberra-gtk3-module
-      - libgail-common
-      - libuchardet0
-      - qtwayland5
-      - libqt5svg5 # for loading icon themes which are svg
-      - libtiff5-dev
-      - libjpeg8-dev
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - libgdk-pixbuf2.0-0
-      - locales-all
-      - xdg-user-dirs
+      - unity-gtk3-module
 
-  desktop-qt5-my:
-    source: snapcraft-desktop-helpers/qt
-    plugin: make
-    make-parameters: ["FLAVOR=qt5"]
-    build-packages:
-      - automake
-      - qtbase5-dev
-      - dpkg-dev
-    stage-packages:
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libqt5gui5
-      - libgdk-pixbuf2.0-0
-      - libqt5svg5 # for loading icon themes which are svg
-      - try: [appmenu-qt5] # not available on core18
-      - locales-all
-      - xdg-user-dirs
+  fixicon:
+    plugin: nil
+    after: [squarehead]
+    override-build: |
+      sed -i 's|Icon=squarehead|Icon=/usr/share/icons/hicolor/256x256/apps/squarehead\.png|' $SNAPCRAFT_STAGE/usr/share/applications/squarehead.desktop
