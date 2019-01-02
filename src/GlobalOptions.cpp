@@ -32,9 +32,9 @@ struct options_t {
         Settings::playerName(p1) = "Player";
 
         PlayerSettings p2;
-        Settings::playerType(p2) = Player_t::AI_Hard;
+        Settings::playerType(p2) = Player_t::AI_VeryEasy;
         Settings::playerPos(p2) = PlayersPos_t::TopLeft;
-        Settings::playerName(p2) = "AI_Hard";
+        Settings::playerName(p2) = "AI_VeryEasy";
 
         players.push_back(p1);
         players.push_back(p2);
@@ -61,9 +61,9 @@ struct options_t {
             Settings::playerName(p1) = settings.value("player1/name", "Player").toString();
 
             PlayerSettings p2;
-            Settings::playerType(p2) = static_cast<Player_t>( settings.value("player2/type", QVariant::fromValue(Player_t::AI_Hard)).toInt() );
+            Settings::playerType(p2) = static_cast<Player_t>( settings.value("player2/type", QVariant::fromValue(Player_t::AI_VeryEasy)).toInt() );
             Settings::playerPos(p2) = static_cast<PlayersPos_t>( settings.value("player2/pos", QVariant::fromValue(PlayersPos_t::TopLeft)).toInt() );
-            Settings::playerName(p2) = settings.value("player2/name", "AI_Hard").toString();
+            Settings::playerName(p2) = settings.value("player2/name", "AI_VeryEasy").toString();
 
             players.push_back(p1);
             players.push_back(p2);
