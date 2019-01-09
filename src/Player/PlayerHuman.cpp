@@ -10,7 +10,11 @@ struct PlayerHuman::data_t {
     bool stopThinking;
 };
 
-PlayerHuman::PlayerHuman(Field &field) : Player(field, Player_t::Human), m_d( std::make_unique<data_t>() ) { }
+PlayerHuman::PlayerHuman(Field &field) :
+    Player(field, Player_t::Human),
+    m_d( std::make_unique<data_t>() )
+{
+}
 
 PlayerHuman::~PlayerHuman() = default;
 

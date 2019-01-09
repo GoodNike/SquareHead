@@ -7,6 +7,8 @@
 #include <chrono>
 #include <random>
 
+#include "Player/Player.h"
+
 using std::begin;
 using std::end;
 using std::for_each;

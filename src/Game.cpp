@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include "Player/Player.h"
+
 Game::Game() :
     m_currentPlayer(nullptr),
     m_gameFinished(true),

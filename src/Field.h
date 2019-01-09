@@ -4,7 +4,12 @@
 #include <QVector>
 #include <QMap>
 
-#include "Player/Player.h"
+#include <functional>
+#include <memory>
+
+class Player;
+enum class Player_t;
+enum class PlayersPos_t;
 
 class Field {
 public:

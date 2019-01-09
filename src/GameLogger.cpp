@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include <QDebug>
 
+#include "Player/Player.h"
 #include "Game.h"
 
 GameLogger::GameLogger(QObject *parent) :
