@@ -108,14 +108,13 @@ struct options_t {
         const QString qtLangLocation = "/usr/share/qt5/translations";
 #endif
 
-        if (!qtTranslator.load(qtLang, qtLangLocation)) {
-            qDebug() << "loadTranslation(): fail to load translation file" << qtLang;
-            qDebug() << "Path:" << qtLangLocation;
-            return false;
-        }
-        if (!QCoreApplication::installTranslator(&qtTranslator)) {
-            qDebug() << "loadTranslation(): fail to install translator for" << qtLang;
-            return false;
+        // Для переводов Qt - некоторые переводы (например en) являются пустыми, потому загружаются с ошибкой.
+        // Потому выведем ошибку только если не вышло перевод установить.
+        if (qtTranslator.load(qtLang, qtLangLocation)) {
+            if (!QCoreApplication::installTranslator(&qtTranslator)) {
+                qDebug() << "loadTranslation(): fail to install translator for" << qtLang;
+                return false;
+            }
         }
 
         if (!appTranslator.load(appLang, appLangLocation)) {
