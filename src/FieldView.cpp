@@ -28,12 +28,12 @@ void FieldView::paintEvent(QPaintEvent *event)
         return;
     }
 
-    QPainter painter(this);
-
-    static const int CELL_SIZE_X = 20;
-    static const int CELL_SIZE_Y = 20;
+    const int CELL_SIZE_X = 20;
+    const int CELL_SIZE_Y = 20;
     const int INDENT_X = pos().x() + 20;
     const int INDENT_Y = pos().y() + 20;
+
+    QPainter painter(this);
 
     // Нарисуем поле.
     int x = m_field->fieldSizeX();
