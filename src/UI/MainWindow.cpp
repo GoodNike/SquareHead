@@ -188,6 +188,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&m_game, &Game::nextTurn, &m_gameLogger, &GameLogger::onNextTurn, Qt::QueuedConnection);
 
+    connect(m_ui.field, &FieldView::pickedColor, this, &MainWindow::on_buttonPlayerTurn, Qt::QueuedConnection);
+
     // Для FieldView укажем какое поле он должен отображать.
     m_ui.field->setField( &m_game.field() );
 
@@ -203,6 +205,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_buttonPlayerTurn(Qt::GlobalColor color)
 {
+    if (m_game.currentPlayersTurn()->type() != Player_t::Human) {
+        return;
+    }
     if (!m_turnAcceptor(color)) {
         qDebug() << "Human turn NOT ACCEPTED, wrong color: " << color;
     }
