@@ -159,12 +159,12 @@
         <translation>First turn</translation>
     </message>
     <message>
-        <location filename="../src/UI/OptionsDialog.ui" line="152"/>
+        <location filename="../src/UI/OptionsDialog.ui" line="157"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/UI/OptionsDialog.ui" line="159"/>
+        <location filename="../src/UI/OptionsDialog.ui" line="164"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
