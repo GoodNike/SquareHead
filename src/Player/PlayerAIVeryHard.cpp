@@ -2,7 +2,8 @@
 
 #include "Field.h"
 
-PlayerAIVeryHard::PlayerAIVeryHard(Field &field) : Player(field, Player_t::AI_Hard)
+PlayerAIVeryHard::PlayerAIVeryHard(Field &field) :
+    Player(field, Player_t::AI_Hard)
 {
 }
 
