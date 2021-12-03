@@ -1,5 +1,7 @@
 #include "PlayerAIMedium.h"
 
+#include <limits>
+
 #include "Field.h"
 
 PlayerAIMedium::PlayerAIMedium(Field &field) : Player(field, Player_t::AI_Medium)
