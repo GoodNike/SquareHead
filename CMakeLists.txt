@@ -201,7 +201,7 @@ else()
     )
 endif()
 
-if(WIN32)
+if(WIN32 AND NOT MINGW)
     include(QtAdditional)
     QtDeploy(TARGET_EXE ${CMAKE_INSTALL_PREFIX}/games/${PROJECT_NAME}.exe FORCE)
     QtEnvironment()
