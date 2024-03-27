@@ -83,13 +83,13 @@ void GameLogger::onNewGame()
     }
 
     QTextStream out(&file);
-    out << "Game is started!" << Qt::endl;
+    out << "Game is started!" << endl;
 
     auto players = m_game->field().players();
-    out << "Total players: " << players.size() << Qt::endl;
+    out << "Total players: " << players.size() << endl;
     size_t idx = 1;
     for (auto &i : players) {
-        out << "Player " << idx << " : " << i->name() << Qt::endl;
+        out << "Player " << idx << " : " << i->name() << endl;
         idx++;
     }
 
