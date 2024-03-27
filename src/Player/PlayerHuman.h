@@ -7,13 +7,11 @@
 class PlayerHuman : public Player {
 public:
     PlayerHuman(Field &field);
-    virtual ~PlayerHuman() override;
+    ~PlayerHuman();
 
-    virtual Qt::GlobalColor makeTurn() override;
-
-    virtual bool acceptTurn(Qt::GlobalColor color) override;
-
-    virtual void stopThinking() override;
+    Qt::GlobalColor makeTurn() override;
+    bool acceptTurn(Qt::GlobalColor color) override;
+    void stopThinking() override;
 
 private:
     struct data_t;

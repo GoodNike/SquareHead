@@ -5,15 +5,11 @@
 class PlayerAIEasy : public Player {
 public:
     PlayerAIEasy(Field &field);
-    virtual ~PlayerAIEasy() override;
 
-    virtual Qt::GlobalColor makeTurn() override;
-
-    virtual bool acceptTurn(Qt::GlobalColor color) override;
-
-    virtual void stopThinking() override;
+    Qt::GlobalColor makeTurn() override;
+    bool acceptTurn(Qt::GlobalColor color) override;
+    void stopThinking() override;
 
 private:
-
 protected:
 };

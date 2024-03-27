@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
 
         update();
-    } , Qt::QueuedConnection );
+    }, Qt::QueuedConnection );
 
     connect(&m_game, &Game::nextPlayerTurn, this, [this] () {
         const auto s = m_game.currentPlayersTurn();
@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent)
                 i->setEnabled(false);
             }
         }
-    } , Qt::QueuedConnection );
+    }, Qt::QueuedConnection );
 
     connect(&m_game, &Game::gameFinished, this, [this] () {
         const auto p = m_game.field().players();
@@ -131,7 +131,7 @@ MainWindow::MainWindow(QWidget *parent)
             i->setEnabled(false);
         }
         QMessageBox::information(this, tr("Game finished!"), list.join('\n'));
-    } , Qt::QueuedConnection );
+    }, Qt::QueuedConnection );
 
     connect(m_ui.actionExit, &QAction::triggered, this, &MainWindow::close);
 
@@ -145,9 +145,9 @@ MainWindow::MainWindow(QWidget *parent)
         m_game.field().removeAllPlayers();
 
         for (const auto &i : GlobalOptions::instance().players()) {
-            const auto &player = Settings::playerType(i);
-            const auto &pos = Settings::playerPos(i);
-            const auto &name = Settings::playerName(i);
+            const auto &player = Settings::type(i);
+            const auto &pos = Settings::pos(i);
+            const auto &name = Settings::name(i);
             if (player == Player_t::Human) {
                 m_turnAcceptor = m_game.field().addPlayer(pos, name, player);
             } else {

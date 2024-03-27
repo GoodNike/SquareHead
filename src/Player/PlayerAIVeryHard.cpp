@@ -4,10 +4,7 @@
 
 PlayerAIVeryHard::PlayerAIVeryHard(Field &field) :
     Player(field, Player_t::AI_Hard)
-{
-}
-
-PlayerAIVeryHard::~PlayerAIVeryHard() = default;
+{ }
 
 Qt::GlobalColor PlayerAIVeryHard::makeTurn()
 {
@@ -122,4 +119,5 @@ bool PlayerAIVeryHard::acceptTurn(Qt::GlobalColor color)
     return false;
 }
 
-void PlayerAIVeryHard::stopThinking() { }
+void PlayerAIVeryHard::stopThinking()
+{ }

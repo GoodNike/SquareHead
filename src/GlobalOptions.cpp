@@ -27,14 +27,14 @@ struct options_t {
     void loadDefaults()
     {
         PlayerSettings p1;
-        Settings::playerType(p1) = Player_t::Human;
-        Settings::playerPos(p1) = PlayersPos_t::BottomRight;
-        Settings::playerName(p1) = "Player";
+        Settings::type(p1) = Player_t::Human;
+        Settings::pos(p1) = PlayersPos_t::BottomRight;
+        Settings::name(p1) = "Player";
 
         PlayerSettings p2;
-        Settings::playerType(p2) = Player_t::AI_VeryEasy;
-        Settings::playerPos(p2) = PlayersPos_t::TopLeft;
-        Settings::playerName(p2) = "AI_VeryEasy";
+        Settings::type(p2) = Player_t::AI_VeryEasy;
+        Settings::pos(p2) = PlayersPos_t::TopLeft;
+        Settings::name(p2) = "AI_VeryEasy";
 
         players.push_back(p1);
         players.push_back(p2);
@@ -56,14 +56,14 @@ struct options_t {
             saveSettings();
         } else {
             PlayerSettings p1;
-            Settings::playerType(p1) = static_cast<Player_t>( settings.value("player1/type", QVariant::fromValue(Player_t::Human)).toInt() );
-            Settings::playerPos(p1) = static_cast<PlayersPos_t>( settings.value("player1/pos", QVariant::fromValue(PlayersPos_t::BottomRight)).toInt() );
-            Settings::playerName(p1) = settings.value("player1/name", "Player").toString();
+            Settings::type(p1) = static_cast<Player_t>( settings.value("player1/type", QVariant::fromValue(Player_t::Human)).toInt() );
+            Settings::pos(p1) = static_cast<PlayersPos_t>( settings.value("player1/pos", QVariant::fromValue(PlayersPos_t::BottomRight)).toInt() );
+            Settings::name(p1) = settings.value("player1/name", "Player").toString();
 
             PlayerSettings p2;
-            Settings::playerType(p2) = static_cast<Player_t>( settings.value("player2/type", QVariant::fromValue(Player_t::AI_VeryEasy)).toInt() );
-            Settings::playerPos(p2) = static_cast<PlayersPos_t>( settings.value("player2/pos", QVariant::fromValue(PlayersPos_t::TopLeft)).toInt() );
-            Settings::playerName(p2) = settings.value("player2/name", "AI_VeryEasy").toString();
+            Settings::type(p2) = static_cast<Player_t>( settings.value("player2/type", QVariant::fromValue(Player_t::AI_VeryEasy)).toInt() );
+            Settings::pos(p2) = static_cast<PlayersPos_t>( settings.value("player2/pos", QVariant::fromValue(PlayersPos_t::TopLeft)).toInt() );
+            Settings::name(p2) = settings.value("player2/name", "AI_VeryEasy").toString();
 
             players.push_back(p1);
             players.push_back(p2);
@@ -78,13 +78,13 @@ struct options_t {
 
         settings.setValue("version", VERSION_STRING);
         if (players.size() >= 2) {
-            settings.setValue( "player1/type", static_cast<int>( Settings::playerType(players[0]) ) );
-            settings.setValue( "player1/pos", static_cast<int>( Settings::playerPos(players[0]) ) );
-            settings.setValue( "player1/name", Settings::playerName(players[0]) );
+            settings.setValue( "player1/type", static_cast<int>( Settings::type(players[0]) ) );
+            settings.setValue( "player1/pos", static_cast<int>( Settings::pos(players[0]) ) );
+            settings.setValue( "player1/name", Settings::name(players[0]) );
 
-            settings.setValue( "player2/type", static_cast<int>( Settings::playerType(players[1]) ) );
-            settings.setValue( "player2/pos", static_cast<int>( Settings::playerPos(players[1]) ) );
-            settings.setValue( "player2/name", Settings::playerName(players[1]) );
+            settings.setValue( "player2/type", static_cast<int>( Settings::type(players[1]) ) );
+            settings.setValue( "player2/pos", static_cast<int>( Settings::pos(players[1]) ) );
+            settings.setValue( "player2/name", Settings::name(players[1]) );
         }
 
         settings.setValue("language", language);

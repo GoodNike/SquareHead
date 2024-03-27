@@ -15,8 +15,7 @@ GameLogger::GameLogger(QObject *parent) :
     m_game(nullptr),
     m_initilized(false),
     m_enabled(false)
-{
-}
+{ }
 
 GameLogger::~GameLogger() = default;
 
@@ -84,13 +83,13 @@ void GameLogger::onNewGame()
     }
 
     QTextStream out(&file);
-    out << "Game is started!" << endl;
+    out << "Game is started!" << Qt::endl;
 
     auto players = m_game->field().players();
-    out << "Total players: " << players.size() << endl;
+    out << "Total players: " << players.size() << Qt::endl;
     size_t idx = 1;
     for (auto &i : players) {
-        out << "Player " << idx << " : " << i->name() << endl;
+        out << "Player " << idx << " : " << i->name() << Qt::endl;
         idx++;
     }
 

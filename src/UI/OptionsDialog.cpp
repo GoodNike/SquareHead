@@ -12,20 +12,20 @@ OptionsDialog::OptionsDialog(QWidget *parent)
 
     // Настройки только для двух игроков.
     if (p.size() == 2) {
-        if (Settings::playerType(p[0]) == Player_t::Human) {
+        if (Settings::type(p[0]) == Player_t::Human) {
             m_ui.rbPlayer->setChecked(true);
             m_ui.rbAI->setChecked(false);
 
-            m_ui.cbDifficulty->setCurrentIndex( static_cast<int>( Settings::playerType(p[1])) );
-            m_ui.cbPosition->setCurrentIndex( static_cast<int>(Settings::playerPos(p[1])) );
-            m_ui.lePlayerName->setText(Settings::playerName(p[0]));
+            m_ui.cbDifficulty->setCurrentIndex( static_cast<int>( Settings::type(p[1])) );
+            m_ui.cbPosition->setCurrentIndex( static_cast<int>(Settings::pos(p[1])) );
+            m_ui.lePlayerName->setText(Settings::name(p[0]));
         } else {
             m_ui.rbPlayer->setChecked(false);
             m_ui.rbAI->setChecked(true);
 
-            m_ui.cbDifficulty->setCurrentIndex( static_cast<int>( Settings::playerType(p[0])) );
-            m_ui.cbPosition->setCurrentIndex( static_cast<int>(Settings::playerPos(p[0])) );
-            m_ui.lePlayerName->setText(Settings::playerName(p[1]));
+            m_ui.cbDifficulty->setCurrentIndex( static_cast<int>( Settings::type(p[0])) );
+            m_ui.cbPosition->setCurrentIndex( static_cast<int>(Settings::pos(p[0])) );
+            m_ui.lePlayerName->setText(Settings::name(p[1]));
         }
     }
 
@@ -39,59 +39,59 @@ void OptionsDialog::on_pbOk_clicked()
     PlayerSettings ai;
     PlayerSettings human;
 
-    Settings::playerType(human) = Player_t::Human;
-    Settings::playerName(human) = m_ui.lePlayerName->text();
+    Settings::type(human) = Player_t::Human;
+    Settings::name(human) = m_ui.lePlayerName->text();
 
     switch (m_ui.cbDifficulty->currentIndex()) {
         case 0:
         {
-            Settings::playerType(ai) = Player_t::AI_VeryEasy;
-            Settings::playerName(ai) = "AI_VeryEasy";
+            Settings::type(ai) = Player_t::AI_VeryEasy;
+            Settings::name(ai) = "AI_VeryEasy";
         }
         break;
 
         case 1:
         {
-            Settings::playerType(ai) = Player_t::AI_Easy;
-            Settings::playerName(ai) = "AI_Easy";
+            Settings::type(ai) = Player_t::AI_Easy;
+            Settings::name(ai) = "AI_Easy";
         }
         break;
 
         case 2:
         {
-            Settings::playerType(ai) = Player_t::AI_Medium;
-            Settings::playerName(ai) = "AI_Medium";
+            Settings::type(ai) = Player_t::AI_Medium;
+            Settings::name(ai) = "AI_Medium";
         }
         break;
 
         case 3:
         {
-            Settings::playerType(ai) = Player_t::AI_Hard;
-            Settings::playerName(ai) = "AI_Hard";
+            Settings::type(ai) = Player_t::AI_Hard;
+            Settings::name(ai) = "AI_Hard";
         }
         break;
 
         case 4:
         default:
         {
-            Settings::playerType(ai) = Player_t::AI_VeryHard;
-            Settings::playerName(ai) = "AI_VeryHard";
+            Settings::type(ai) = Player_t::AI_VeryHard;
+            Settings::name(ai) = "AI_VeryHard";
         }
     }
 
     switch (m_ui.cbPosition->currentIndex()) {
         case 0:
         {
-            Settings::playerPos(ai) = PlayersPos_t::TopLeft;
-            Settings::playerPos(human) = PlayersPos_t::BottomRight;
+            Settings::pos(ai) = PlayersPos_t::TopLeft;
+            Settings::pos(human) = PlayersPos_t::BottomRight;
         }
         break;
 
         case 1:
         default:
         {
-            Settings::playerPos(ai) = PlayersPos_t::BottomRight;
-            Settings::playerPos(human) = PlayersPos_t::TopLeft;
+            Settings::pos(ai) = PlayersPos_t::BottomRight;
+            Settings::pos(human) = PlayersPos_t::TopLeft;
         }
         break;
     }

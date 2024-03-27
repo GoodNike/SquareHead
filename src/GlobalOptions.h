@@ -12,19 +12,19 @@ using PlayerSettings = std::tuple<Player_t, PlayersPos_t, QString>;
 
 namespace Settings {
     template<typename T = PlayerSettings>
-    inline auto&& playerType(T &ps)
+    inline auto&& type(T &ps)
     {
         return std::get<Player_t>(ps);
     }
 
     template<typename T = PlayerSettings>
-    inline auto&& playerPos(T &ps)
+    inline auto&& pos(T &ps)
     {
         return std::get<PlayersPos_t>(ps);
     }
 
     template<typename T = PlayerSettings>
-    inline auto&& playerName(T &ps)
+    inline auto&& name(T &ps)
     {
         return std::get<QString>(ps);
     }

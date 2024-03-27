@@ -8,7 +8,9 @@ struct PlayerAIVeryEasy::data_t {
     std::mt19937 gen;
 };
 
-PlayerAIVeryEasy::PlayerAIVeryEasy(Field &field) : Player(field, Player_t::AI_VeryEasy), m_d( std::make_unique<data_t>() )
+PlayerAIVeryEasy::PlayerAIVeryEasy(Field &field) :
+    Player(field, Player_t::AI_VeryEasy),
+    m_d( std::make_unique<data_t>() )
 {
     std::random_device rd;
     m_d->gen.seed(rd());
@@ -47,4 +49,5 @@ bool PlayerAIVeryEasy::acceptTurn(Qt::GlobalColor color)
     return false;
 }
 
-void PlayerAIVeryEasy::stopThinking() { }
+void PlayerAIVeryEasy::stopThinking()
+{ }

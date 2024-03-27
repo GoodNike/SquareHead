@@ -2,11 +2,9 @@
 
 #include "Field.h"
 
-PlayerAIEasy::PlayerAIEasy(Field &field) : Player(field, Player_t::AI_VeryEasy)
-{
-}
-
-PlayerAIEasy::~PlayerAIEasy() = default;
+PlayerAIEasy::PlayerAIEasy(Field &field) :
+    Player(field, Player_t::AI_VeryEasy)
+{ }
 
 Qt::GlobalColor PlayerAIEasy::makeTurn()
 {
@@ -41,4 +39,5 @@ bool PlayerAIEasy::acceptTurn(Qt::GlobalColor color)
     return false;
 }
 
-void PlayerAIEasy::stopThinking() { }
+void PlayerAIEasy::stopThinking()
+{ }

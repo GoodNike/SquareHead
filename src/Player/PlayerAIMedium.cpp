@@ -4,11 +4,9 @@
 
 #include "Field.h"
 
-PlayerAIMedium::PlayerAIMedium(Field &field) : Player(field, Player_t::AI_Medium)
-{
-}
-
-PlayerAIMedium::~PlayerAIMedium() = default;
+PlayerAIMedium::PlayerAIMedium(Field &field) :
+    Player(field, Player_t::AI_Medium)
+{ }
 
 Qt::GlobalColor PlayerAIMedium::makeTurn()
 {
@@ -83,4 +81,5 @@ bool PlayerAIMedium::acceptTurn(Qt::GlobalColor color)
     return false;
 }
 
-void PlayerAIMedium::stopThinking() { }
+void PlayerAIMedium::stopThinking()
+{ }
